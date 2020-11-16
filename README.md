@@ -1,6 +1,7 @@
 ## Introduction
 The purpose of this tool is to introduce a testing process which allows to identify broken charts on Sisense before actual users encounter them.
 It was developed by our BI Team at [Billie](https://www.billie.io/).
+![](https://github.com/ozean12/sisense-testing-framework/blob/main/logos/billie.png "Billie")
 ## Getting Started
 Disclaimer: since we at Billie use Snowflake as our primary cloud DWH solution, this tool is designed to work with [The Snowflake Connector for Python](https://docs.snowflake.com/en/user-guide/python-connector.html). However, this specific module can be replaced with any other database connector of your choice. 
 
