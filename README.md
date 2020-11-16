@@ -31,7 +31,7 @@ ctx = snowflake.connector.connect(
             )
 ```
 
-If set up correctly, the framework will write data to two tables in the specified database schema. By default their names are `PERISCOPE_TEST_RESULTS` and `PERISCOPE_DWH_ENTITIES` and they need to be created in advance:
+If set up correctly, the framework will write data to two tables in the specified database schema. By default their names are `PERISCOPE_TEST_RESULTS` and `PERISCOPE_DWH_ENTITIES` and they need to be created in advance (you can of course choose your own names) :
 
 ```sql
 CREATE OR REPLACE TABLE PERISCOPE_TEST_RESULTS (
@@ -54,13 +54,25 @@ CREATE OR REPLACE TABLE PERISCOPE_DWH_ENTITIES (
 ```
 
 
-
 ## Using the framework
 
-After adding the submodule and setting up the database connection, you can run the tool using the follwing
+After adding the submodule and setting up the database, you can run the testing framework using a deployment/runtime environement tool of your choise (e.g. Jenkins, Heroku, etc).
 
+*Please note that you need to deploy your Sisense repo and not this one.*
+
+Once deployed, run
+
+```bash
 git submodule update --remote sisense-testing-framework
+```
+
+to fetch and update the submodule and
+
+```
 python3 app.py
+```
+
+to run the app itself.
 
 ## Contributing
 PRs and issues are welcome! 🎉
