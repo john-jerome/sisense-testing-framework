@@ -1,8 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Introduction 
-<img src="logos/sisense.png" align="right" width="200px"/>
-The purpose of this tool is to introduce a testing process which allows to identify broken charts on Sisense before actual users encounter them.
+## Introduction <img src="logos/sisense.png" align="right" width="200px"/>
+The purpose of this tool is to introduce a testing process which allows to identify broken charts on Sisense before actual business users encounter them.
 It was developed by our BI Team at [Billie](https://www.billie.io)
 
 ## Getting Started
