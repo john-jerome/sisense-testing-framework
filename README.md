@@ -5,7 +5,7 @@ The purpose of this tool is to introduce a testing process which allows to ident
 It was developed by our BI Team at [Billie](https://www.billie.io)
 
 ## Getting Started
-*Disclaimer*: since we at Billie use Snowflake as our primary cloud DWH solution, this tool is designed to work with [The Snowflake Connector for Python](https://docs.snowflake.com/en/user-guide/python-connector.html). However, this specific module can be replaced with any other database connector of your choice. 
+**Disclaimer**: since we at Billie use Snowflake as our primary cloud DWH solution, this tool is designed to work with [The Snowflake Connector for Python](https://docs.snowflake.com/en/user-guide/python-connector.html). However, this specific module can be replaced with any other database connector of your choice. 
 
 The easiest way to start using this code is to add it as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to your Sisense for CDT (former Periscope Data) repository:
 
@@ -31,7 +31,36 @@ ctx = snowflake.connector.connect(
             )
 ```
 
+If set up correctly, the framework will write data to two tables in the specified database schema. By default their names are `PERISCOPE_TEST_RESULTS` and `PERISCOPE_DWH_ENTITIES` and they need to be created in advance:
+
+```sql
+CREATE OR REPLACE TABLE PERISCOPE_TEST_RESULTS (
+	NAME VARCHAR(16777216),
+	BI_NAME VARCHAR(16777216),
+	OWNER VARCHAR(16777216),
+	SQL_CODE VARCHAR(16777216),
+	SQL_CODE_RAW VARCHAR(16777216),
+	PASS VARCHAR(16777216),
+	CREATED_AT TIMESTAMP_NTZ(9),
+	COMPILATION_ERROR VARCHAR(16777216)
+);
+
+CREATE OR REPLACE TABLE PERISCOPE_DWH_ENTITIES (
+	PERISCOPE_NAME VARCHAR(256),
+	PERISCOPE_TYPE VARCHAR(256),
+	TABLE_NAME VARCHAR(256),
+	CREATED_AT TIMESTAMP_NTZ(9)
+);
+```
+
+
+
 ## Using the framework
+
+After adding the submodule and setting up the database connection, you can run the tool using the follwing
+
+git submodule update --remote sisense-testing-framework
+python3 app.py
 
 ## Contributing
 PRs and issues are welcome! 🎉
