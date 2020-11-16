@@ -16,9 +16,22 @@ git submodule add https://github.com/ozean12/sisense-testing-framework
 Next, you need to commit and push these changes:
 
 ```shell
-git commit -am 'Add sisense-testing module'
+git commit -am 'Add sisense testing module'
 git push origin main
 ```
+
+In order to connect the tool with your Snowflake database, you need to add a few enviromental variables which are used in `snowflake_connect` function:
+
+```python
+ctx = snowflake.connector.connect(
+              user = os.getenv("SfUser"),
+              password = os.getenv("SfPassword"),
+              account = os.getenv("SfAccount"),
+              schema = os.getenv("SfSchema")
+            )
+```
+
+## Using the framework
 
 ## Contributing
 PRs and issues are welcome! 🎉
