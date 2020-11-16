@@ -60,13 +60,13 @@ def snowflake_set_parameters(ctx, role, wh, db, schema):
     except:
         print("Cannot use " + role + " or " + wh + '.')
 
-def snowflake_execute_queries(ctx, data, excluded_charts):
+def snowflake_execute_queries(ctx, data, excluded_charts=[]):
     """Run SQL queries using the Snowflake connector and store the results.
 
     Args:
         ctx: database connection object
         data (array of dicts): initial testing data
-        excluded_charts (list): list of charts to exclude from testing
+        excluded_charts (list): list of views/charts to exclude from testing. Default is empty list
 
     Returns:
         data (array of dict): testing data augmented with 'PASS' and 'COMPILATION_ERROR' columns

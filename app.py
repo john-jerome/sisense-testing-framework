@@ -23,8 +23,8 @@ def main():
     view_results = view_ref_replace(view_results, view_reference_data)
     explore_results = filter_ref_replace(view_ref_replace(explore_results, view_reference_data))
 
-    view_results = snowflake_execute_queries(ctx, view_results)
-    explore_results = snowflake_execute_queries(ctx, explore_results)
+    view_results = snowflake_execute_queries(ctx, data=view_results)
+    explore_results = snowflake_execute_queries(ctx, data=explore_results)
 
     df_views = pd.DataFrame.from_dict(view_results)
     df_explores = pd.DataFrame.from_dict(explore_results)
