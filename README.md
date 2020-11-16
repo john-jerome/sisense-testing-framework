@@ -20,7 +20,7 @@ git commit -am 'Add sisense testing module'
 git push origin main
 ```
 
-In order to connect the tool with your Snowflake database, you need to add a few enviromental variables which are used in `snowflake_connect` function:
+In order to connect the tool with your Snowflake database, you need to add a few enviromental variables which are passed to `snowflake_connect` function:
 
 ```python
 ctx = snowflake.connector.connect(
@@ -73,6 +73,11 @@ python3 app.py
 ```
 
 to run the app itself.
+
+## TODO
+
+* Improve SQL parsing mechanism.
+
 
 ## Contributing
 PRs and issues are welcome! 🎉
