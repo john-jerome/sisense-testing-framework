@@ -47,17 +47,19 @@ def snowflake_set_parameters(ctx, role = 'TRANSFORMER_ROLE', wh = 'TRANSFORMING_
     except:
         print("Cannot use " + role + " or " + wh + '.')
     
-
 def snowflake_execute_queries(ctx, data):
     """Execute sql queries from sql_code column and store the results."""
 
     print("Executing the queries...\n")
 
-    exclude_list = ['dashboards_bank_connection_performance_continuous_connection_kpi',
-    'dashboards_platform_customer_risk_overview_rating_deterioration_to__hr__or_of_at_least_2_grades_of_customers_active_in__daterange_',
-    'dashboards_2020_q4_okr_4_detail_customers_w__accepted_demand_test']
-    
     # exclude some explores from here to avoid noise in the project
+    exclude_list = [
+        'chart_bank_connection_performance_continuous_connection_kpi',
+        'chart_platform_customer_risk_overview_rating_deterioration_to__hr__or_of_at_least_2_grades_of_customers_active_in__daterange_',
+        'chart_2020_q4_okr_4_detail_customers_w__accepted_demand_test',
+        'chart_flow__customer_risk_overview_rating_deterioration_to__hr__or_of_at_least_2_grades_of_customers_active_in__daterange_'
+        ]
+
     for row in data:
         cs = ctx.cursor()
         if ('[funnel]' in row['SQL_CODE_RAW']) or any(explore in row['NAME'] for explore in exclude_list):
@@ -75,13 +77,12 @@ def snowflake_execute_queries(ctx, data):
     return data
 
 
-
-def snowflake_dump_table(ctx, df, table_name = 'PERISCOPE_TEST_RESULTS'):
+def snowflake_insert_data(ctx, df, table_name):
     """Dump data into our Snowflake DWH."""
 
     #success, nchunks, nrows, _ = write_pandas(ctx, df, table_name)
     try:
-        success, nchunks, nrows, _ = write_pandas(ctx, df, table_name)
+        _, _, nrows, _ = write_pandas(ctx, df, table_name)
         print("Successfully written " + str(nrows) + " rows of data to Snowflake.\n")
     except Exception as e:
         print("Could not save the data.\n")

@@ -17,6 +17,7 @@ def filter_ref_replace(data):
         row['SQL_CODE_RAW'] = re.sub(exp1, r"\1", row['SQL_CODE_RAW'], flags = re.S|re.I)
         row['SQL_CODE_RAW'] = re.sub(exp2, r"null", row['SQL_CODE_RAW'], flags = re.S|re.I)
         row['SQL_CODE_RAW'] = re.sub(exp3, r"", row['SQL_CODE_RAW'], flags = re.S|re.I)
+    
     return data
 
 
@@ -27,7 +28,6 @@ def view_ref_replace(data, reference_data):
 
         row1['SQL_CODE_RAW'] = row1['SQL_CODE']
 
-        # make an exception for [funnel_new] to parse it 2 times
         for row2 in reference_data:
             view_ref = '[' + row2['NAME'] + ']'
             if view_ref in row1['SQL_CODE']:
