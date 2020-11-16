@@ -6,11 +6,14 @@ Disclaimer: since we at Billie use Snowflake as our primary cloud DWH solution, 
 
 The easiest way to start using this code is to add it as a submodule to your Sisense for CDT (former Periscope Data) repository:
 
-```$ git submodule add https://github.com/ozean12/sisense-testing-framework```
+```shell
+git submodule add https://github.com/ozean12/sisense-testing-framework 
+```
 
 Next, you need to commit and push these changes:
 
-```$ git commit -am 'Add sisense-testing module'
+```shell
+git commit -am 'Add sisense-testing module'
 git push origin main
 ```
 
