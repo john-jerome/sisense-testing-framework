@@ -17,4 +17,6 @@ git commit -am 'Add sisense-testing module'
 git push origin main
 ```
 
+## Contributing
+PRs and issues are welcome! 🎉
 
