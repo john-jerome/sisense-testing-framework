@@ -5,11 +5,12 @@ import pytz
 
 from snowflake.connector.pandas_tools import write_pandas
 
-account = 'yz13668.eu-central-1'
-schema = 'BASE'
-
 def generate_ts():
-    """Generate current timestamp in Snowflake format."""
+    """Generate current local timestamp.
+
+    Returns:
+        current_ts (str): current timestamp converted to string.
+    """
 
     tz = pytz.timezone('Europe/Berlin')
     current_ts = datetime.datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -17,15 +18,19 @@ def generate_ts():
     return current_ts
 
 def snowflake_connect():
-    """Connect to Snowflake warehouse with user credentials."""
+    """Establish Snowflake connection.
+
+    Returns:
+        ctx: database connection object
+    """
 
     print("Connecting to the database... \n")
     try:
         ctx = snowflake.connector.connect(
             user = os.getenv("SfUser"),
             password = os.getenv("SfPassword"),
-            account = account,
-            schema = schema)
+            account = os.getenv("SfAccount"),
+            schema = os.getenv("SfSchema"))
         print("Connected to the database. \n")
     except Exception as e:
         print("Could not connect to the database. \n")
@@ -34,8 +39,16 @@ def snowflake_connect():
     
     return ctx
 
-def snowflake_set_parameters(ctx, role = 'TRANSFORMER_ROLE', wh = 'TRANSFORMING_WH', db = 'ANALYTICS', schema = 'DBT_META'):
-    """Set Python-Snowflake connector parameters."""
+def snowflake_set_parameters(ctx, role, wh, db, schema):
+    """Set warehouse parameters.
+
+    Args:
+        ctx : database connection object
+        role (str): Snowflake role
+        wh (str): Snowflake warehouse
+        db (str): Snowflake database
+        schema (str): Snowflake schema
+    """
     
     cs = ctx.cursor()
     try:
@@ -46,23 +59,24 @@ def snowflake_set_parameters(ctx, role = 'TRANSFORMER_ROLE', wh = 'TRANSFORMING_
         print("Using " + role + " and " + wh + " now.\n")
     except:
         print("Cannot use " + role + " or " + wh + '.')
-    
-def snowflake_execute_queries(ctx, data):
-    """Execute sql queries from sql_code column and store the results."""
+
+def snowflake_execute_queries(ctx, data, excluded_charts):
+    """Run SQL queries using the Snowflake connector and store the results.
+
+    Args:
+        ctx: database connection object
+        data (array of dicts): initial testing data
+        excluded_charts (list): list of charts to exclude from testing
+
+    Returns:
+        data (array of dict): testing data augmented with 'PASS' and 'COMPILATION_ERROR' columns
+    """
 
     print("Executing the queries...\n")
 
-    # exclude some explores from here to avoid noise in the project
-    exclude_list = [
-        'chart_bank_connection_performance_continuous_connection_kpi',
-        'chart_platform_customer_risk_overview_rating_deterioration_to__hr__or_of_at_least_2_grades_of_customers_active_in__daterange_',
-        'chart_2020_q4_okr_4_detail_customers_w__accepted_demand_test',
-        'chart_flow__customer_risk_overview_rating_deterioration_to__hr__or_of_at_least_2_grades_of_customers_active_in__daterange_'
-        ]
-
     for row in data:
         cs = ctx.cursor()
-        if ('[funnel]' in row['SQL_CODE_RAW']) or any(explore in row['NAME'] for explore in exclude_list):
+        if ('[funnel]' in row['SQL_CODE_RAW']) or any(explore in row['NAME'] for explore in excluded_charts):
               row['PASS'] = 'true'
         else:
             try:
@@ -76,11 +90,15 @@ def snowflake_execute_queries(ctx, data):
 
     return data
 
-
 def snowflake_insert_data(ctx, df, table_name):
-    """Dump data into our Snowflake DWH."""
+    """Write data to Snowflake.
 
-    #success, nchunks, nrows, _ = write_pandas(ctx, df, table_name)
+    Args:
+        ctx: database connection object
+        df (pandas df): data to insert
+        table_name (str): destination table name
+    """
+    
     try:
         _, _, nrows, _ = write_pandas(ctx, df, table_name)
         print("Successfully written " + str(nrows) + " rows of data to Snowflake.\n")
@@ -88,10 +106,13 @@ def snowflake_insert_data(ctx, df, table_name):
         print("Could not save the data.\n")
         print(e)
 
-
 def snowflake_close_connection(ctx):
-    """Close connection to Snowflake database."""
+    """Close connection to Snowflake database.
 
+    Args:
+        ctx: database connection object
+    """
+    
     try:
         ctx.close()
         print("Snowflake connection has been closed. \n")

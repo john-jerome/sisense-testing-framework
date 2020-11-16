@@ -2,10 +2,26 @@ import os
 import yaml
 import re
 
+excluded_dashboards = [
+                'wip', 
+                'untitled', 
+                'personal', 
+                'account_optimization', 
+                'team_workspace',
+                'periscope_usage',
+                'accounting_support_cases',
+                'account_maintenance',
+                'clone'
+            ]
+
 def create_view_data(start_path):
-    """
-    Create a list of view names and the corresponding sql queries.
-    This only produces the initial data that is to be augmented later.
+    """Read view names and SQL code from the repository.
+
+    Args:
+        start_path (str): "./views"
+
+    Returns:
+        view_results (array of dict): contains name, owner and SQL code for each view
     """
     
     view_results = []
@@ -36,28 +52,23 @@ def create_view_data(start_path):
     return view_results
 
 
-def create_explore_data(start_path):
-    """
-    Create a list of chart names and the corresponding sql queries.
-    This only produces the initial data that is to be augmented later.
-    """
+def create_chart_data(start_path, excluded_dashboards=excluded_dashboards):
+    """Read chart names and SQL code from the repository.
 
+    Args:
+        start_path (str): "./dashboards"
+        excluded_dashboards (list): list of dashboards to exclude from testing (e.g. WIP, Untitled, etc)
+    
+    Returns:
+        chart_results (array of dict): contains name, dashboard owner and SQL code for each chart
+    """
+    
     chart_results = []
 
     print("Processing the charts data...\n")
 
     for path, _, files in os.walk(start_path):
-        excluded_dashboards = [
-                'wip', 
-                'untitled', 
-                'personal', 
-                'account_optimization', 
-                'team_workspace',
-                'periscope_usage',
-                'accounting_support_cases',
-                'account_maintenance',
-                'clone']
-                
+        
         for filename in files:
             if ('sql' in filename) and ('text' not in filename) and all(dashboard not in path for dashboard in excluded_dashboards):
                 chart_dict = {}
@@ -100,11 +111,19 @@ def create_explore_data(start_path):
     return chart_results
 
 def simple_sql_parse(data, periscope_type):
-    """Using regex to parse table names from a sql query and store them in a list."""
+    """Extract table names used in the SQL code using regex 
+
+    Args:
+        data ([type]): [description]
+        periscope_type (str): 'view' or 'chart'
+
+    Returns:
+        tables_list (array of dict): one table/persicope entity per row 
+    """
 
     exp = r"\b((accounting|dim_models|raw|data_marts|base)\.\w*)\b"
 
-    print("Extracting table names...\n")
+    print("Extracting table names used in {}s...\n".format(periscope_type))
 
     tables_list = []
 

@@ -1,8 +1,15 @@
 import re
 
 def filter_ref_replace(data):
-    """Replace filter formatting with standard sql using regex."""
+    """Convert Periscope-specific syntax into raw SQL code for further execution.
 
+    Args:
+        data (array of dict): original data
+
+    Returns:
+        data (array of dict): data after removing all Periscope-specific SQL syntax
+    """
+    
     # for date aggregations
     exp1 = r"\[([^][:]*)\:(sec|min|hour|day|date|week|month|year|month_of_year|aggregation)\]" 
     # for [channel_grouping] reference in Periscope
@@ -20,9 +27,17 @@ def filter_ref_replace(data):
     
     return data
 
-
 def view_ref_replace(data, reference_data):
-    """Replace the [view_reference] with the corresponding sql code."""
+    """Replace the [view_reference] with the corresponding view SQL code.
+
+    Args:
+        data (array of dict): original data
+        reference_data (array of dict): view data
+
+    Returns:
+        data (array of dict): data after replacing all view references
+    """
+    
     
     for row1 in data:
 
