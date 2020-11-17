@@ -77,6 +77,7 @@ to run the app itself.
 ## TODO
 
 * Improve SQL parsing mechanism.
+* Handle charts with identical names.
 
 
 ## Contributing
