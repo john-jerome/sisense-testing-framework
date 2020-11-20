@@ -75,7 +75,8 @@ def create_chart_data(start_path, excluded_dashboards=excluded_dashboards):
 
                 path_sql = os.path.join(path, filename)
                 dashboard_with_id = path_sql.split('/')[2]
-                chart_dict["NAME"] = 'chart_'  + dashboard_with_id.split('.')[0]  + '_' + filename.split('.')[0]
+                chart_with_id = path_sql.split('/')[3]
+                chart_dict["NAME"] = 'chart_'  + dashboard_with_id.split('.')[0]  + '_' + chart_with_id.replace(".", "_")
                 
                 try:
                     with open(path_sql) as f:

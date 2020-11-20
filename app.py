@@ -1,14 +1,11 @@
 import time 
 import pandas as pd
 import os
-import sys
 from datetime import datetime
 
-sys.path.insert(0,'modules')
-
-from snowflake_connector import *
-from periscope import create_view_data, create_chart_data, simple_sql_parse
-from filters import view_ref_replace, filter_ref_replace
+from modules.snowflake_connector import *
+from modules.periscope import create_view_data, create_chart_data, simple_sql_parse
+from modules.filters import view_ref_replace, filter_ref_replace
 
 def main():
 
